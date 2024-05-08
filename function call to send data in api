@@ -1,0 +1,13 @@
+ const handlePushNotification = async () => {
+    await sendPushNotification({
+      data: {
+        senderId: userId,
+        templateId: notificationTemplateIds.WELCOME,
+      },
+      receiverIds: [userId],
+      template_id: notificationTemplateIds.WELCOME,
+      custom_data: {
+        sender: `${fullName}`,
+      },
+    });
+  };
