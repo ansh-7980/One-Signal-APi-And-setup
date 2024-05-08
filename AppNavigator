@@ -1,0 +1,40 @@
+ useEffect(() => {
+    getInitialUrlDeepLink();
+    const subscription = Linking.addEventListener('url', handleDeepLink);
+    dispatch(fetchCurrentUser()).then(res => {
+      console.log('res?.id?.uuid', res?.payload?.id?.uuid);
+      if (res?.payload?.id?.uuid) {
+        OneSignal.login(res.payload?.id?.uuid);
+      }
+    });
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  // for one signal
+  useEffect(() => {
+    OneSignal.initialize(ONESIGNAL_APP_ID);
+    if (userId) {
+      requestPermission();
+      OneSignal.Notifications.addEventListener('click', notificationListener);
+    }
+    return () => {
+      OneSignal.Notifications.removeEventListener(
+        'click',
+        notificationListener,
+      );
+    };
+  }, [userId]);
+  // for one signal
+  const requestPermission = async () => {
+    const canRequest = await OneSignal.Notifications.canRequestPermission();
+    console.log('canRequest', canRequest);
+    if (canRequest)
+      OneSignal.Notifications.requestPermission(true).then(res =>
+        console.log('ressssss?????<<<<<', res),
+      );
+  };
+  const notificationListener = (event: NotificationClickEvent) => {
+    if (navigation) handleNotification(navigation, event?.notification);
+  };
