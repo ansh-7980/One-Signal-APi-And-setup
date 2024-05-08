@@ -1,0 +1,15 @@
+import {StackNavigationProp} from '@react-navigation/stack';
+import {OSNotification} from 'react-native-onesignal';
+import {notificationTemplateIds} from '../utils/onesignal_Ids';
+
+export const handleNotification = (
+  navigation: StackNavigationProp<RootStackParamList, 'LandingPage', undefined>,
+  notification: OSNotification,
+) => {
+  console.log('handling notification', JSON.stringify(notification));
+  const {transactionRole, transactionId, templateId} =
+    notification.additionalData;
+  console.log('transactionRole', transactionRole);
+  console.log('transactionId', transactionId);
+  console.log('templateId', templateId);
+};
